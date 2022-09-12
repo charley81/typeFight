@@ -12,6 +12,29 @@ const round = document.querySelector('.round')
 const word = document.querySelector('.word')
 const input = document.querySelector('.input')
 
+const words = [
+  'Ablutophobia',
+  'Arachibutyrophobia',
+  'Batrachomyomachy',
+  'Blandiloquence',
+  'Cacodemomania',
+  'Ceruminiferous',
+  'Chronosynchronicity',
+  'Defecaloesiophobia',
+  'Didaskaleinophobia',
+  'Edriophthalmous',
+  'Epiphenomenalism',
+  'Fibrochondrosteal',
+  'Forisfamiliation',
+  'Gastrohysterotomy',
+  'Galactodensimeter',
+  'Gynotikolobomassophile',
+  'Hexakosioihexekontahexaphobia',
+  'Incomprehensibleness',
+  'Jungermanniaceae',
+  'Katathermometer',
+]
+
 input.addEventListener('focus', () => {
   console.log('user just focused on the input')
 })

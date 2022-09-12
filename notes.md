@@ -1,0 +1,13 @@
+- add event listen to start on input focus
+- set countdown
+- 1st player types word as fast as possible
+- correct count updates in two spots
+- time up
+- player with most correct wins the round
+- current win is updated
+- best two out of three wins the game
+- when user wins two of the three rounds they win the game and their total wins is updated
+- new game starts after two out of three wins
+- restart button sets everything to 0
+- attempt to change text color as user types correct letter
+- attempt to use thrid party api for words

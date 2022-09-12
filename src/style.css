@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700&display=swap');
 
+/* css vars */
 :root {
   --max-width: 1000px;
   --tranition: all 0.3s ease-in-out;
@@ -12,13 +13,98 @@
   --color-grey-dark: #5c6967;
 }
 
+/* styling on everything */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* base styles */
 body {
   line-height: 1.5;
   font-family: var(--font-family);
+  font-size: 16px;
+  color: var(--color-dark);
+}
+
+section {
+  max-width: var(--max-width);
+  margin: auto;
+}
+
+/* nav */
+#top-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+#top-nav a {
+  color: var(--color-grey-dark);
+}
+
+/* info section */
+#info {
+  display: flex;
+  justify-content: space-between;
+  padding: 4rem 0;
+}
+
+#info h1 {
+  color: var(--color-primary);
+  font-size: 8rem;
+}
+
+#info h1 span {
+  color: var(--color-dark);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+#info h3 {
+  font-size: 2rem;
+}
+
+#info p {
+  color: var(--color-grey-dark);
+}
+
+/* word & input */
+.word {
+  font-size: 10rem;
+  text-align: center;
+}
+
+.input {
+  width: 100%;
+  outline: transparent;
+  border: transparent;
+  border-bottom: 1px solid var(--color-grey-dark);
+  padding-bottom: 0.5rem;
+}
+
+/* session info */
+#session-info {
+  margin: 4rem auto;
+  text-align: center;
+}
+
+/* restart section */
+.btn {
+  background-color: var(--color-light);
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-dark);
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: var(--color-dark);
+  color: var(--color-light);
+}
+
+#restart-section {
+  text-align: center;
 }

@@ -43,6 +43,15 @@ const words = [
   'Katathermometer',
 ]
 
-input.addEventListener('focus', () => {
-  console.log('user just focused on the input')
+inputEl.addEventListener('focus', () => {
+  console.log('start')
+  getWord()
 })
+
+function getWord() {
+  fetch('https://random-words-api.vercel.app/word')
+    .then(res => res.json())
+    .then(data => {
+      wordEl.innerHTML = data[0].word
+    })
+}

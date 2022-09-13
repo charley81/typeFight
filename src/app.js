@@ -82,27 +82,40 @@ function proccessCurrentWord() {
   charTyped++
   errors = 0
 
+  // get all span elements from the word h1
   wordsSpanArray = wordEl.querySelectorAll('span')
+  // loop over the array of spans to check if user input is correct or not
   wordsSpanArray.forEach((char, index) => {
+    // get the current char in the input arr
     let typedChar = curInputArr[index]
 
+    // nothing entered
     if (typedChar == null) {
       char.classList.remove('correct')
       char.classList.remove('incorrect')
-    } else if (typedChar === char.innerText) {
+    }
+    // correct
+    else if (typedChar === char.innerText) {
       char.classList.add('correct')
       char.classList.remove('incorrect')
-    } else {
+    }
+    // incorrect
+    else {
       char.classList.add('incorrect')
       char.classList.remove('correct')
       errors++
     }
   })
 
+  // calculate total letters correct
   let correctChars = charTyped - (totalErrors + errors)
+  // calculate accuracy percentage
   let accuracyPerc = (correctChars / charTyped) * 100
+  // round the accuracy percentage and add to accuracy DOM element
   accuracy.textContent = Math.round(accuracyPerc)
 
+  // if the length of the current input word is the same as the current word to be typed then update to a new word
+  // ===== UPDATE THIS TO CHECK IF THE TYPED WORD IS THE SAME AS THE CURRENTWORD
   if (curInput.length === currentWord.length) {
     updateWord()
     inputEl.value = ''

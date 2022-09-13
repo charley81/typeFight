@@ -6,6 +6,7 @@ const roundEl = document.querySelector('.round')
 const wordEl = document.querySelector('.word')
 const inputEl = document.querySelector('.input')
 const accuracy = document.querySelector('.accuracy')
+const URL = 'https://random-words-api.vercel.app/word'
 
 // vars to keep track of things
 const currentWins = [0, 0]
@@ -50,20 +51,11 @@ const wordsArray = [
   'Katathermometer',
 ]
 
-// fetching word from api
-function getWord() {
-  fetch('https://random-words-api.vercel.app/word')
-    .then(res => res.json())
-    .then(data => {
-      wordEl.innerHTML = data[0].word
-    })
-}
-
 // get a word from the word array and split the chars into span elements
 function updateWord() {
   // needs this or else word won't update
   wordEl.textContent = null
-  currentWord = getWord()
+  const currentWord = wordsArray[wordIndex]
 
   // seperates each letter and make a span of each to style each letter individually => this will be a h1 with each letter as a child span
   currentWord.split('').forEach(char => {

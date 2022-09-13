@@ -115,8 +115,7 @@ function proccessCurrentWord() {
   accuracy.textContent = Math.round(accuracyPerc)
 
   // if the length of the current input word is the same as the current word to be typed then update to a new word
-  // ===== UPDATE THIS TO CHECK IF THE TYPED WORD IS THE SAME AS THE CURRENTWORD
-  if (curInput.length === currentWord.length) {
+  if (curInput === currentWord) {
     updateWord()
     inputEl.value = ''
   }

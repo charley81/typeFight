@@ -5,6 +5,7 @@ const player2 = document.querySelector('.player-2')
 const roundEl = document.querySelector('.round')
 const wordEl = document.querySelector('.word')
 const inputEl = document.querySelector('.input')
+const lettersCorrectEl = document.querySelector('.letters-correct')
 
 // vars to keep track of things
 const currentWins = [0, 0]
@@ -22,6 +23,8 @@ let wordIndex = 0
 let letters = 0
 let words = 0
 let charTyped = 0
+let errors = 0
+let totalErrors = 0
 
 // array of words to type
 const wordsArray = [
@@ -47,24 +50,20 @@ const wordsArray = [
   'Katathermometer',
 ]
 
-// get a word from the word array and
-//split the chars into span elements
+// get a word from the word array and split the chars into span elements
 function updateWord() {
   // needs this or else word won't update
   wordEl.textContent = null
   currentWord = wordsArray[wordIndex]
 
-  // seperates each letter and make a span of each
-  // to style each letter individually
-  // this will be a h1 with each letter as a child span
+  // seperates each letter and make a span of each to style each letter individually => this will be a h1 with each letter as a child span
   currentWord.split('').forEach(char => {
     const charSpan = document.createElement('span')
     charSpan.innerText = char
     wordEl.appendChild(charSpan)
   })
 
-  // if the current word is not the last word move to the next word
-  // if its the last word reset the index to 0 and start over
+  // if the current word is not the last word move to the next word, if its the last word reset the index to 0 and start over
   if (wordIndex < wordsArray.length - 1) {
     wordIndex++
   } else {
@@ -72,10 +71,7 @@ function updateWord() {
   }
 }
 
-// get the current value of the input box
-// color text as typed
-// calculate letters typed correctly
-// move to next word
+// get the current value of the input box, color text as typed, calculate letters typed correctly, move to next word
 function proccessCurrentWord() {
   // store the current char typed in a var
   curInput = inputEl.value
@@ -84,18 +80,36 @@ function proccessCurrentWord() {
 
   // increment the var charTyped which holds the number of chars typed
   charTyped++
+
+  errors = 0
+
+  // select all the span elements in the provided word
+  wordSpanArray = wordEl.querySelectorAll('span')
+  wordSpanArray.forEach((char, i) => {
+    let typedChar = curInputArr[i]
+
+    // nothing typed
+    if (typedChar === null) {
+      char.classList.remove('correct', 'incorrect')
+    }
+    // correct char
+    else if (typedChar === char.innerText) {
+      char.classList.add('correct')
+      char.classList.remove('incorrect')
+    }
+    // incorrect char
+    else {
+      char.classList.add('incorrect')
+      char.classList.remove('correct')
+      errors++
+    }
+  })
+
+  let correctLetters = charTyped - (totalErrors + errors)
+  lettersCorrectEl.textContent = correctLetters
 }
 
 // start game
 function startGame() {
   updateWord()
 }
-
-// ========== PESUDO CODE =========
-// all stats set to 0
-// once user focus on input => countdown starts
-// words appear and change as user types correctly
-// when time is up the player correct var is updated and  other player goes
-// once both players have gone the higher correct wins the round and their current wins var is updated
-// once one player has two wins the win the game and their total wins var is updated
-// the current wins var and correct var go back to zero and new game is started on focus again

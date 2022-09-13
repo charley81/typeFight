@@ -35,8 +35,14 @@
 
     <!-- word & input-->
     <section id="word-section">
-      <h1 class="word">Satisfaction</h1>
-      <input type="text" placeholder="start typeing..." class="input" />
+      <h1 class="word">loading...</h1>
+      <input
+        type="text"
+        placeholder="start typeing..."
+        class="input"
+        oninput="proccessCurrentWord()"
+        onfocus="startGame()"
+      />
     </section>
 
     <!-- session info -->
@@ -47,7 +53,7 @@
 
     <!-- restart btn -->
     <section id="restart-section">
-      <button class="btn restart">Restart</button>
+      <button class="btn restart" onclick="reset()">Restart</button>
     </section>
 
     <!-- local js file -->

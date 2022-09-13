@@ -47,27 +47,48 @@ const wordsArray = [
   'Katathermometer',
 ]
 
-inputEl.addEventListener('focus', () => {
-  updateWord()
-})
-
+// get a word from the word array and
+//split the chars into span elements
 function updateWord() {
+  // needs this or else word won't update
   wordEl.textContent = null
   currentWord = wordsArray[wordIndex]
 
   // seperates each letter and make a span of each
   // to style each letter individually
+  // this will be a h1 with each letter as a child span
   currentWord.split('').forEach(char => {
     const charSpan = document.createElement('span')
     charSpan.innerText = char
     wordEl.appendChild(charSpan)
   })
 
+  // if the current word is not the last word move to the next word
+  // if its the last word reset the index to 0 and start over
   if (wordIndex < wordsArray.length - 1) {
     wordIndex++
   } else {
     wordIndex = 0
   }
+}
+
+// get the current value of the input box
+// color text as typed
+// calculate letters typed correctly
+// move to next word
+function proccessCurrentWord() {
+  // store the current char typed in a var
+  curInput = inputEl.value
+  // create an arr of the typed chars
+  curInputArr = curInput.split('')
+
+  // increment the var charTyped which holds the number of chars typed
+  charTyped++
+}
+
+// start game
+function startGame() {
+  updateWord()
 }
 
 // ========== PESUDO CODE =========

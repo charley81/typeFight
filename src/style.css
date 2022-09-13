@@ -2,7 +2,7 @@
 
 /* css vars */
 :root {
-  --max-width: 1000px;
+  --max-width: 700px;
   --tranition: all 0.3s ease-in-out;
   --border-radius: 4px;
   --font-family: 'Inter', sans-serif;

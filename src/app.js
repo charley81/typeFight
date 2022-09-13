@@ -5,7 +5,7 @@ const player2 = document.querySelector('.player-2')
 const roundEl = document.querySelector('.round')
 const wordEl = document.querySelector('.word')
 const inputEl = document.querySelector('.input')
-const lettersCorrectEl = document.querySelector('.letters-correct')
+const accuracy = document.querySelector('.accuracy')
 
 // vars to keep track of things
 const currentWins = [0, 0]
@@ -50,11 +50,20 @@ const wordsArray = [
   'Katathermometer',
 ]
 
+// fetching word from api
+function getWord() {
+  fetch('https://random-words-api.vercel.app/word')
+    .then(res => res.json())
+    .then(data => {
+      wordEl.innerHTML = data[0].word
+    })
+}
+
 // get a word from the word array and split the chars into span elements
 function updateWord() {
   // needs this or else word won't update
   wordEl.textContent = null
-  currentWord = wordsArray[wordIndex]
+  currentWord = getWord()
 
   // seperates each letter and make a span of each to style each letter individually => this will be a h1 with each letter as a child span
   currentWord.split('').forEach(char => {
@@ -80,33 +89,33 @@ function proccessCurrentWord() {
 
   // increment the var charTyped which holds the number of chars typed
   charTyped++
-
   errors = 0
 
-  // select all the span elements in the provided word
-  wordSpanArray = wordEl.querySelectorAll('span')
-  wordSpanArray.forEach((char, i) => {
-    let typedChar = curInputArr[i]
+  wordsSpanArray = wordEl.querySelectorAll('span')
+  wordsSpanArray.forEach((char, index) => {
+    let typedChar = curInputArr[index]
 
-    // nothing typed
-    if (typedChar === null) {
-      char.classList.remove('correct', 'incorrect')
-    }
-    // correct char
-    else if (typedChar === char.innerText) {
+    if (typedChar == null) {
+      char.classList.remove('correct')
+      char.classList.remove('incorrect')
+    } else if (typedChar === char.innerText) {
       char.classList.add('correct')
       char.classList.remove('incorrect')
-    }
-    // incorrect char
-    else {
+    } else {
       char.classList.add('incorrect')
       char.classList.remove('correct')
       errors++
     }
   })
 
-  let correctLetters = charTyped - (totalErrors + errors)
-  lettersCorrectEl.textContent = correctLetters
+  let correctChars = charTyped - errors
+  let accuracyPerc = (correctChars / charTyped) * 100
+  accuracy.textContent = Math.round(accuracyPerc)
+
+  if (curInput.length == currentWord.length) {
+    updateWord()
+    inputEl.value = ''
+  }
 }
 
 // start game

@@ -50,6 +50,7 @@ const wordsArray = [
   'Jungermanniaceae',
   'Katathermometer',
 ]
+console.log(words)
 
 // get a word from the word array and split the chars into span elements
 function updateWord() {
@@ -70,6 +71,7 @@ function updateWord() {
   } else {
     wordIndex = 0
   }
+  console.log(words)
 }
 
 // get the current value of the input box, color text as typed, calculate letters typed correctly, move to next word
@@ -119,6 +121,7 @@ function proccessCurrentWord() {
   if (curInput === currentWord) {
     updateWord()
     inputEl.value = ''
+    words++
   }
 }
 
@@ -181,4 +184,5 @@ function finishGame() {
 
   // calculate amount of words typed
   // update the words var in player info
+  player1El.querySelector('.words').textContent = `Words: ${words}`
 }

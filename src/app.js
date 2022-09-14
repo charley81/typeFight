@@ -1,7 +1,7 @@
 // DOM elements
 const restartBtn = document.querySelector('.restart')
-const player1El = document.querySelector('.player-1')
-const player2El = document.querySelector('.player-2')
+const player1El = document.querySelector('.player-0')
+const player2El = document.querySelector('.player-1')
 const roundEl = document.querySelector('.round')
 const wordEl = document.querySelector('.word')
 const inputEl = document.querySelector('.input')
@@ -50,6 +50,21 @@ const wordsArray = [
   'Jungermanniaceae',
   'Katathermometer',
 ]
+
+// ===== START GAME =====
+// start game when user focuses on the input box.... reset all values, update the word, create a new timer
+function startGame() {
+  // reset all values back to zero except for total wins
+  // wait on this for now
+  resetValues()
+  // run updateWord function to get a new word
+  updateWord()
+
+  // clear old timer and start a new one (STARTS TIMER)
+  clearInterval(timer)
+  // run this functio nevery second which updates the timer
+  timer = setInterval(updateTimer, 1000)
+}
 
 // ===== UPDATE WORD =====
 // get a word from the word array and split the chars into span elements
@@ -121,24 +136,9 @@ function proccessCurrentWord() {
   }
 }
 
-// ===== START GAME =====
-// start game when user focuses on the input box.... reset all values, update the word, create a new timer
-function startGame() {
-  // reset all values back to zero except for total wins
-  // wait on this for now
-  resetValues()
-  // run updateWord function to get a new word
-  updateWord()
-
-  // clear old timer and start a new one (STARTS TIMER)
-  clearInterval(timer)
-  // run this functio nevery second which updates the timer
-  timer = setInterval(updateTimer, 1000)
-}
-
 // ===== RESET VALUES =====
 // reset all values in UI back to zero except for total wins
-function resetValues() {
+function resetValues(checkWordUpdate) {
   timeLeft = timeLimit
   timeElapsed = 0
   errors = 0
@@ -148,6 +148,13 @@ function resetValues() {
   wordIndex = 0
   inputEl.disabled = false
   inputEl.value = ''
+  clearInterval(timer)
+  countdownEl.textContent = `${timeLeft}s Remaining`
+  if (checkWordUpdate) {
+    wordEl.textContent = 'loading...'
+    words = 0
+    player1El.querySelector('.words').textContent = words
+  }
 }
 
 // ===== UPDATE TIMER =====
@@ -168,7 +175,7 @@ function updateTimer() {
 }
 
 // ===== FINISH GAME =====
-// finish game.. delete the timer, display restart game btn, calculate number of words typed for each player and determine who won
+// finish game.. delete the timer, calculate number of words typed for each player and determine who won
 function finishGame() {
   // stop timer
   clearInterval(timer)
@@ -177,7 +184,7 @@ function finishGame() {
   // save this for when the game is over
   // inputEl.disabled = true
   // update the word text
-  wordEl.textContent = 'click in input to begin'
+  wordEl.textContent = 'round over...'
 
   // restart the game when user focuses on input
   inputEl.addEventListener('click', startGame)
@@ -191,4 +198,4 @@ function finishGame() {
 // oninput="proccessCurrentWord()" onfocus="startGame()"
 inputEl.addEventListener('input', proccessCurrentWord)
 inputEl.addEventListener('focus', startGame)
-restartBtn.addEventListener('click', resetValues)
+restartBtn.addEventListener('click', () => resetValues(true))

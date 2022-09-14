@@ -50,8 +50,8 @@ const wordsArray = [
   'Jungermanniaceae',
   'Katathermometer',
 ]
-console.log(words)
 
+// ===== UPDATE WORD =====
 // get a word from the word array and split the chars into span elements
 function updateWord() {
   // needs this or else word won't update
@@ -71,9 +71,9 @@ function updateWord() {
   } else {
     wordIndex = 0
   }
-  console.log(words)
 }
 
+// ===== PROCESS WORD =====
 // get the current value of the input box, color text as typed, calculate letters typed correctly, move to next word
 function proccessCurrentWord() {
   // store the current char typed in a var
@@ -111,11 +111,7 @@ function proccessCurrentWord() {
   })
 
   // calculate total letters correct
-  let correctChars = charTyped - (totalErrors + errors)
-  // calculate accuracy percentage
-  let accuracyPerc = (correctChars / charTyped) * 100
-  // round the accuracy percentage and add to accuracy DOM element
-  accuracy.textContent = Math.round(accuracyPerc)
+  let correctChars = charTyped - errors
 
   // if the length of the current input word is the same as the current word to be typed then update to a new word
   if (curInput === currentWord) {
@@ -125,9 +121,11 @@ function proccessCurrentWord() {
   }
 }
 
+// ===== START GAME =====
 // start game when user focuses on the input box.... reset all values, update the word, create a new timer
 function startGame() {
   // reset all values back to zero except for total wins
+  // wait on this for now
   resetValues()
   // run updateWord function to get a new word
   updateWord()
@@ -138,6 +136,7 @@ function startGame() {
   timer = setInterval(updateTimer, 1000)
 }
 
+// ===== RESET VALUES =====
 // reset all values in UI back to zero except for total wins
 function resetValues() {
   timeLeft = timeLimit
@@ -148,12 +147,10 @@ function resetValues() {
   charTyped = 0
   wordIndex = 0
   inputEl.disabled = false
-
   inputEl.value = ''
-  wordEl.textContent = 'start typing when ready'
-  accuracyEl.textContent = 100
 }
 
+// ===== UPDATE TIMER =====
 // update the time, finish the game
 function updateTimer() {
   // when update timer function is called which, setInterval is set to 1000ms (1s)
@@ -165,10 +162,12 @@ function updateTimer() {
   // if timeLeft is not > 0 then the round is over, update the timer to round over and run finish game
   else {
     countdownEl.textContent = 'round over'
+    resetValues()
     finishGame()
   }
 }
 
+// ===== FINISH GAME =====
 // finish game.. delete the timer, display restart game btn, calculate number of words typed for each player and determine who won
 function finishGame() {
   // stop timer
@@ -178,8 +177,7 @@ function finishGame() {
   // save this for when the game is over
   // inputEl.disabled = true
   // update the word text
-  wordEl.textContent = 'Round Over... Start Typing'
-  wordEl.style.fontWeight
+  wordEl.textContent = 'click in input to begin'
 
   // restart the game when user focuses on input
   inputEl.addEventListener('click', startGame)
@@ -188,3 +186,9 @@ function finishGame() {
   // update the words var in player info
   player1El.querySelector('.words').textContent = `Words: ${words}`
 }
+
+// ===== EVENT LISTENERS =====
+// oninput="proccessCurrentWord()" onfocus="startGame()"
+inputEl.addEventListener('input', proccessCurrentWord)
+inputEl.addEventListener('focus', startGame)
+restartBtn.addEventListener('click', resetValues)

@@ -8,4 +8,4 @@
 
 - keep track of errors and deduct points for errors
 - List game instructors somewhere
-- Add loading animation
+- Add diffulculty settings

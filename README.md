@@ -9,3 +9,4 @@
 - keep track of errors and deduct points for errors
 - List game instructors somewhere
 - Add diffulculty settings
+- Add option to play with upper and lower case letters

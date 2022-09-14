@@ -9,9 +9,9 @@ const accuracyEl = document.querySelector('.accuracy')
 const countdownEl = document.querySelector('#session-info').querySelector('p')
 
 // vars to keep track of things
-let currentWins = [0, 0]
-let totalWins = [0, 0]
-let correct = [0, 0]
+const currentWins = [0, 0]
+const totalWins = [0, 0]
+const correct = [0, 0]
 let currentPlayer = 0
 let currentScore = 0
 let timeLimit = 20
@@ -153,7 +153,9 @@ function resetValues(checkWordUpdate) {
   if (checkWordUpdate) {
     wordEl.textContent = 'loading...'
     words = 0
-    player1El.querySelector('.words').textContent = words
+    document
+      .querySelector(`.player-${currentPlayer}`)
+      .querySelector('.words').textContent = words
   }
 }
 
@@ -168,9 +170,21 @@ function updateTimer() {
   }
   // if timeLeft is not > 0 then the round is over, update the timer to round over and run finish game
   else {
-    countdownEl.textContent = 'round over'
-    resetValues()
-    finishGame()
+    // at this point no time left on countdown, turn is over... check if one player has 2 wins and if so game over if not then switch players
+    if (currentWins[0] === 2 || currentWins[1] === 2) {
+      countdownEl.textContent = 'game over'
+      resetValues()
+      finishGame()
+    } else {
+      // switch player
+      document
+        .querySelector(`.player-${currentPlayer}`)
+        .querySelector('.words').textContent = 0
+      currentPlayer = currentPlayer === 0 ? 1 : 0
+      resetValues()
+      finishGame()
+      words = 0
+    }
   }
 }
 
@@ -191,11 +205,12 @@ function finishGame() {
 
   // calculate amount of words typed
   // update the words var in player info
-  player1El.querySelector('.words').textContent = `Words: ${words}`
+  document
+    .querySelector(`.player-${currentPlayer}`)
+    .querySelector('.words').textContent = `Words: ${words}`
 }
 
 // ===== EVENT LISTENERS =====
-// oninput="proccessCurrentWord()" onfocus="startGame()"
 inputEl.addEventListener('input', proccessCurrentWord)
 inputEl.addEventListener('focus', startGame)
 restartBtn.addEventListener('click', () => resetValues(true))

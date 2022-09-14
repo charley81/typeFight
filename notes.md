@@ -20,3 +20,14 @@
 // once both players have gone the higher correct wins the round and their current wins var is updated
 // once one player has two wins the win the game and their total wins var is updated
 // the current wins var and correct var go back to zero and new game is started on focus again
+
+========= BRAINSTORM V1 =========
+
+- Rd 1
+- Player one click into input
+- focus event listner fires
+  - starts countdown and word typing functiontality
+- when time is up.. amount of words typed updates the words var... 2nd player goes and the same process happens
+- once both players have gone the one with the most words typed increments their current win var
+- step above happen all over again for each round
+- Once one player gets two wins... their total wins var is incremented and game stars over with the total wins var state staying

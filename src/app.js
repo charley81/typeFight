@@ -1,19 +1,20 @@
 // DOM elements
 const restartBtn = document.querySelector('.restart')
-const player1 = document.querySelector('.player-1')
-const player2 = document.querySelector('.player-2')
+const player1El = document.querySelector('.player-1')
+const player2El = document.querySelector('.player-2')
 const roundEl = document.querySelector('.round')
 const wordEl = document.querySelector('.word')
 const inputEl = document.querySelector('.input')
-const accuracy = document.querySelector('.accuracy')
+const accuracyEl = document.querySelector('.accuracy')
+const countdownEl = document.querySelector('#session-info').querySelector('p')
 
 // vars to keep track of things
-const currentWins = [0, 0]
-const totalWins = [0, 0]
-const correct = [0, 0]
+let currentWins = [0, 0]
+let totalWins = [0, 0]
+let correct = [0, 0]
 let currentPlayer = 0
 let currentScore = 0
-let timeLimit = 60
+let timeLimit = 20
 let currentWord = ''
 let round = 1
 let timeLeft = timeLimit
@@ -122,7 +123,63 @@ function proccessCurrentWord() {
   }
 }
 
-// start game
+// start game when user focuses on the input box.... reset all values, update the word, create a new timer
 function startGame() {
+  // reset all values back to zero except for total wins
+  resetValues()
+  // run updateWord function to get a new word
   updateWord()
+
+  // clear old timer and start a new one (STARTS TIMER)
+  clearInterval(timer)
+  // run this functio nevery second which updates the timer
+  timer = setInterval(updateTimer, 1000)
+}
+
+// reset all values in UI back to zero except for total wins
+function resetValues() {
+  timeLeft = timeLimit
+  timeElapsed = 0
+  errors = 0
+  totalErrors = 0
+  accuracy = 0
+  charTyped = 0
+  wordIndex = 0
+  inputEl.disabled = false
+
+  inputEl.value = ''
+  wordEl.textContent = 'start typing when ready'
+  accuracyEl.textContent = 100
+}
+
+// update the time, finish the game
+function updateTimer() {
+  // when update timer function is called which, setInterval is set to 1000ms (1s)
+  if (timeLeft > 0) {
+    timeLeft--
+    timeElapsed++
+    countdownEl.textContent = `${timeLeft}s Remaining`
+    restartBtn.style.display = 'none'
+  }
+  // if timeLeft is not > 0 then the round is over, update the timer to round over and run finish game
+  else {
+    countdownEl.textContent = 'round over'
+    finishGame()
+  }
+}
+
+// finish game.. delete the timer, display restart game btn, calculate number of words typed for each player and determine who won
+function finishGame() {
+  // stop timer
+  clearInterval(timer)
+
+  // disable the input
+  inputEl.disabled = true
+  // update the word text
+  wordEl.textContent = 'click restart'
+  // show the reset button
+  restartBtn.style.display = 'block'
+
+  // calculate amount of words typed
+  // update the words var in player info
 }

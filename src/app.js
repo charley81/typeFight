@@ -161,7 +161,6 @@ function updateTimer() {
     timeLeft--
     timeElapsed++
     countdownEl.textContent = `${timeLeft}s Remaining`
-    restartBtn.style.display = 'none'
   }
   // if timeLeft is not > 0 then the round is over, update the timer to round over and run finish game
   else {
@@ -176,11 +175,14 @@ function finishGame() {
   clearInterval(timer)
 
   // disable the input
-  inputEl.disabled = true
+  // save this for when the game is over
+  // inputEl.disabled = true
   // update the word text
-  wordEl.textContent = 'click restart'
-  // show the reset button
-  restartBtn.style.display = 'block'
+  wordEl.textContent = 'Round Over... Start Typing'
+  wordEl.style.fontWeight
+
+  // restart the game when user focuses on input
+  inputEl.addEventListener('click', startGame)
 
   // calculate amount of words typed
   // update the words var in player info

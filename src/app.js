@@ -18,7 +18,7 @@ let currentPlayer = 0
 let totalErrors = 0
 let errors = 0
 let wordIndex = 0
-let timeLimit = 20
+let timeLimit = 10
 let timer
 let timeLeft = timeLimit
 let currentInputLetter
@@ -59,11 +59,6 @@ function startRound() {
   timer = setInterval(updateTimer, 1000)
 }
 
-// ===== reset =====
-function reset() {
-  clearInterval(timer)
-}
-
 // ===== update word =====
 function updateWord() {
   // removes the loading text once clicking into input
@@ -83,13 +78,27 @@ function updateWord() {
   wordIndex < wordsArray.length - 1 ? wordIndex++ : (wordIndex = 0)
 }
 
+// ===== reset =====
+function reset(delay) {
+  if (delay) {
+    inputEl.disabled = true
+    setTimeout(() => {
+      inputEl.disabled = false
+      inputEl.value = ''
+    }, 1000)
+  }
+
+  timeLeft = timeLimit
+  clearInterval(timer)
+}
+
 // ===== updateTimer =====
 function updateTimer() {
   if (timeLeft > 0) {
     timeLeft--
     countdownEl.textContent = `${timeLeft}s Remaining`
   } else {
-    reset()
+    reset(true)
     handleChangeOver()
   }
 }

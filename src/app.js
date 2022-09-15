@@ -23,6 +23,8 @@ let timer
 let timeLeft = timeLimit
 let currentInputLetter
 let currentWord
+let roundWinner
+let winner
 
 // array of words to be typed
 const wordsArray = [
@@ -53,10 +55,25 @@ function startRound() {
   timeRemaining.textContent = `${timeLimit}s Remaining`
   reset()
   updateWord()
-  // clear all timers
-  clearInterval(timer)
+
   // run the function updateTimer every 1 sec => start new timers
   timer = setInterval(updateTimer, 1000)
+}
+
+// ===== reset =====
+function reset(delay) {
+  if (delay) {
+    inputEl.disabled = true
+    setTimeout(() => {
+      inputEl.disabled = false
+      inputEl.value = ''
+    }, 1000)
+  }
+
+  // reset the time to the start time limit
+  timeLeft = timeLimit
+  // clear the timer
+  clearInterval(timer)
 }
 
 // ===== update word =====
@@ -78,20 +95,6 @@ function updateWord() {
   wordIndex < wordsArray.length - 1 ? wordIndex++ : (wordIndex = 0)
 }
 
-// ===== reset =====
-function reset(delay) {
-  if (delay) {
-    inputEl.disabled = true
-    setTimeout(() => {
-      inputEl.disabled = false
-      inputEl.value = ''
-    }, 1000)
-  }
-
-  timeLeft = timeLimit
-  clearInterval(timer)
-}
-
 // ===== updateTimer =====
 function updateTimer() {
   if (timeLeft > 0) {
@@ -99,24 +102,8 @@ function updateTimer() {
     countdownEl.textContent = `${timeLeft}s Remaining`
   } else {
     reset(true)
-    handleChangeOver()
-  }
-}
-
-// ===== handleChangeOver =====
-function handleChangeOver() {
-  wordEl.textContent = 'round over...'
-  let winner
-  const [p0WordCount, p1WordCount] = playerWordCount
-  if (p0WordCount === 2 || p1WordCount === 2) {
-    if (p0WordCount > p1WordCount) {
-      winner = 'player 1'
-      totalWins[0]++
-    } else {
-      winner = 'player 2'
-      totalWins[1]++
-    }
-    finishGame(winner)
+    currentPlayer = currentPlayer === 0 ? 1 : 0
+    console.log(currentPlayer)
   }
 }
 
@@ -159,11 +146,6 @@ function editTypedWord() {
       .querySelector(`.player-${currentPlayer}`)
       .querySelector('.words').textContent = `Words: ${correctWords}`
   }
-}
-
-// ===== finishGame =====
-function finishGame(winner) {
-  console.log(`Game Over: ${winner} won`)
 }
 
 // ===== event listeners =====

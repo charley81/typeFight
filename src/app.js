@@ -6,18 +6,19 @@ const roundEl = document.querySelector('.round')
 const wordEl = document.querySelector('.word')
 const inputEl = document.querySelector('.input')
 const countdownEl = document.querySelector('#session-info').querySelector('p')
+const timeRemaining = document.querySelector('#session-info').querySelector('p')
 
 // vars to keep track of things
 let round = 1
 const playerWordCount = [0, 0]
 const currentWins = [0, 0]
 const totalWins = [0, 0]
-const correctWords = 0
+let correctWords = 0
 let currentPlayer = 0
 let totalErrors = 0
 let errors = 0
 let wordIndex = 0
-let timeLimit = 10
+let timeLimit = 20
 let timer
 let timeLeft = timeLimit
 let currentInputLetter
@@ -49,6 +50,7 @@ const wordsArray = [
 
 // ===== start game =====
 function startRound() {
+  timeRemaining.textContent = `${timeLimit}s Remaining`
   reset()
   updateWord()
   // clear all timers
@@ -59,7 +61,7 @@ function startRound() {
 
 // ===== reset =====
 function reset() {
-  console.log('reseting')
+  clearInterval(timer)
 }
 
 // ===== update word =====
@@ -86,11 +88,15 @@ function updateTimer() {
   if (timeLeft > 0) {
     timeLeft--
     countdownEl.textContent = `${timeLeft}s Remaining`
+  } else {
+    reset()
+    handleChangeOver()
   }
 }
 
 // ===== handleChangeOver =====
 function handleChangeOver() {
+  wordEl.textContent = 'round over...'
   let winner
   const [p0WordCount, p1WordCount] = playerWordCount
   if (p0WordCount === 2 || p1WordCount === 2) {
@@ -108,8 +114,8 @@ function handleChangeOver() {
 // ===== editTypedWord =====
 // all this function does is edit the word to be typed by adding and removing css classes showing green for correctly tpyed letter and red for wrong letter typed
 function editTypedWord() {
-  currInputLetter = inputEl.value
-  const currInputArray = currInputLetter.split('')
+  currInput = inputEl.value
+  const currInputArray = currInput.split('')
 
   // get all spans from h1
   wordSpanArray = wordEl.querySelectorAll('span')
@@ -135,6 +141,15 @@ function editTypedWord() {
       char.classList.add('incorrect')
     }
   })
+
+  if (currInput === currentWord) {
+    inputEl.value = ''
+    updateWord()
+    correctWords++
+    document
+      .querySelector(`.player-${currentPlayer}`)
+      .querySelector('.words').textContent = `Words: ${correctWords}`
+  }
 }
 
 // ===== finishGame =====

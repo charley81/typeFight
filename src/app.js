@@ -18,7 +18,7 @@ let currentPlayer = 0
 let totalErrors = 0
 let errors = 0
 let wordIndex = 0
-let timeLimit = 20
+let timeLimit = 10
 let timer
 let timeLeft = timeLimit
 let currentInputLetter
@@ -107,6 +107,8 @@ function updateTimer() {
     wordEl.textContent = currentPlayer === 0 ? 'Player 1' : 'Player 2'
     player0El.querySelector('h3').classList.toggle('current-player')
     player1El.querySelector('h3').classList.toggle('current-player')
+    currentPlayer === 1 ? round++ : round
+    roundEl.innerHTML = `<span>Round: </span> ${round}`
   }
 }
 

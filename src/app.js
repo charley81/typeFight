@@ -11,8 +11,8 @@ const timeRemaining = document.querySelector('#session-info').querySelector('p')
 // vars to keep track of things
 let round = 1
 const playerWordCount = [0, 0]
-const currentWins = [0, 0]
-const totalWins = [0, 0]
+const roundsWon = [0, 0]
+const gamesWon = [0, 0]
 let correctWords = 0
 let currentPlayer = 0
 let totalErrors = 0
@@ -52,8 +52,11 @@ const wordsArray = [
 
 // ===== start game =====
 function startRound() {
+  // update UI to show time remaining for start of game
   timeRemaining.textContent = `${timeLimit}s Remaining`
+  // setup the timer
   reset()
+  // display a word
   updateWord()
 
   // run the function updateTimer every 1 sec => start new timers
@@ -62,6 +65,7 @@ function startRound() {
 
 // ===== reset =====
 function reset(delay) {
+  // if a truthy value (i.e true) is passed in then meanining it's the end of the round.. diable the input from typing and then after 1 sec undisable it and set the value to empty string
   if (delay) {
     inputEl.disabled = true
     setTimeout(() => {
@@ -95,26 +99,6 @@ function updateWord() {
   wordIndex < wordsArray.length - 1 ? wordIndex++ : (wordIndex = 0)
 }
 
-// ===== updateTimer =====
-function updateTimer() {
-  if (timeLeft > 0) {
-    timeLeft--
-    countdownEl.textContent = `${timeLeft}s Remaining`
-  } else {
-    reset(true)
-    currentPlayer === 0
-      ? (playerWordCount[0] = correctWords)
-      : (playerWordCount[1] = correctWords)
-    currentPlayer === 1 ? round++ : round
-    currentPlayer = currentPlayer === 0 ? 1 : 0
-    correctWords = 0
-    wordEl.textContent = currentPlayer === 0 ? 'Player 1' : 'Player 2'
-    player0El.querySelector('h3').classList.toggle('current-player')
-    player1El.querySelector('h3').classList.toggle('current-player')
-    roundEl.innerHTML = `<span>Round: </span> ${round}`
-  }
-}
-
 // ===== editTypedWord =====
 // all this function does is edit the word to be typed by adding and removing css classes showing green for correctly tpyed letter and red for wrong letter typed
 function editTypedWord() {
@@ -146,13 +130,50 @@ function editTypedWord() {
     }
   })
 
+  // if the word being typed is the same as the given word
   if (currInput === currentWord) {
     inputEl.value = ''
     updateWord()
     correctWords++
     document
       .querySelector(`.player-${currentPlayer}`)
-      .querySelector('.words').textContent = `Words: ${correctWords}`
+      .querySelector('.words').textContent = `Words Correct: ${correctWords}`
+  }
+}
+
+// ===== updateTimer =====
+function updateTimer() {
+  // round in progress... countdown and display in UI
+  if (timeLeft > 0) {
+    timeLeft--
+    countdownEl.textContent = `${timeLeft}s Remaining`
+  }
+  // time up... end of round
+  else {
+    // run reset function and pass in true for input manipulation after round
+    reset(true)
+
+    // if the current player is = to player0 then update player0's word count else update player1's word count
+    currentPlayer === 0
+      ? (playerWordCount[0] = correctWords)
+      : (playerWordCount[1] = correctWords)
+
+    // if the second player went then the round is over, so increment the round var
+    currentPlayer === 1 ? round++ : round
+    // if the current player is 0 then change it to 1 else 0
+    currentPlayer = currentPlayer === 0 ? 1 : 0
+    // reset this var to be 0 for start of next round for next player
+    correctWords = 0
+
+    // replace word element text with the next player name
+    wordEl.textContent = currentPlayer === 0 ? 'Player 1' : 'Player 2'
+
+    // toggle css class to update UI to show current player
+    player0El.querySelector('h3').classList.toggle('current-player')
+    player1El.querySelector('h3').classList.toggle('current-player')
+
+    // update the UI to show the current round
+    roundEl.innerHTML = `<span>Round: </span> ${round}`
   }
 }
 

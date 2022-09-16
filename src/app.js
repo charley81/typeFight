@@ -105,13 +105,12 @@ function updateTimer() {
     currentPlayer === 0
       ? (playerWordCount[0] = correctWords)
       : (playerWordCount[1] = correctWords)
-    console.log(playerWordCount)
+    currentPlayer === 1 ? round++ : round
     currentPlayer = currentPlayer === 0 ? 1 : 0
     correctWords = 0
     wordEl.textContent = currentPlayer === 0 ? 'Player 1' : 'Player 2'
     player0El.querySelector('h3').classList.toggle('current-player')
     player1El.querySelector('h3').classList.toggle('current-player')
-    currentPlayer === 1 ? round++ : round
     roundEl.innerHTML = `<span>Round: </span> ${round}`
   }
 }

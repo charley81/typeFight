@@ -18,7 +18,7 @@ let currentPlayer = 0
 let totalErrors = 0
 let errors = 0
 let wordIndex = 0
-let timeLimit = 10
+let timeLimit = 20
 let timer
 let timeLeft = timeLimit
 let currentInputLetter
@@ -103,7 +103,8 @@ function updateTimer() {
   } else {
     reset(true)
     currentPlayer = currentPlayer === 0 ? 1 : 0
-    console.log(currentPlayer)
+    correctWords = 0
+    wordEl.textContent = 'next player...'
   }
 }
 

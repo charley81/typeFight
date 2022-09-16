@@ -1,3 +1,6 @@
+// player0 = player 1
+// player1 = player 2
+
 // DOM Elements
 const restartBtn = document.querySelector('.restart')
 const player0El = document.querySelector('.player-0')
@@ -159,7 +162,36 @@ function updateTimer() {
       : (playerWordCount[1] = correctWords)
 
     // if the second player went then the round is over, so increment the round var
-    currentPlayer === 1 ? round++ : round
+    // currentPlayer === 1 ? round++ : round
+
+    if (currentPlayer === 1) {
+      round++
+      // find out who won the round
+      roundWinner = playerWordCount[0] > playerWordCount[1] ? 0 : 1
+      // increment the winners round won var
+      roundsWon[roundWinner]++
+      // update the UI to show the winner
+      document
+        .querySelector(`.player-${roundWinner}`)
+        .querySelector(
+          '.rounds-won'
+        ).textContent = `Rounds Won: ${roundsWon[roundWinner]}`
+      alert(`Player ${roundWinner + 1} won the round 🎉`)
+
+      // if player has two wins.. they win the game.. game over
+      if (roundsWon[0] === 2 || roundsWon[1] === 2) {
+        let winner = roundsWon[0] === 2 ? 0 : 1
+        gamesWon[winner]++
+        alert(`Game Over: Player${winner + 1} Won 🎉`)
+        document
+          .querySelector(`.player-${winner}`)
+          .querySelector('.games-won').textContent = `Games Won: ${
+          gamesWon[winner++]
+        }`
+        // reset everything except the games won var
+      }
+    }
+
     // if the current player is 0 then change it to 1 else 0
     currentPlayer = currentPlayer === 0 ? 1 : 0
     // reset this var to be 0 for start of next round for next player

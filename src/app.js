@@ -105,6 +105,8 @@ function updateTimer() {
     currentPlayer = currentPlayer === 0 ? 1 : 0
     correctWords = 0
     wordEl.textContent = currentPlayer === 0 ? 'Player 1' : 'Player 2'
+    player0El.querySelector('h3').classList.toggle('current-player')
+    player1El.querySelector('h3').classList.toggle('current-player')
   }
 }
 

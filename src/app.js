@@ -102,6 +102,10 @@ function updateTimer() {
     countdownEl.textContent = `${timeLeft}s Remaining`
   } else {
     reset(true)
+    currentPlayer === 0
+      ? (playerWordCount[0] = correctWords)
+      : (playerWordCount[1] = correctWords)
+    console.log(playerWordCount)
     currentPlayer = currentPlayer === 0 ? 1 : 0
     correctWords = 0
     wordEl.textContent = currentPlayer === 0 ? 'Player 1' : 'Player 2'

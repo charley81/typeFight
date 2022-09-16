@@ -104,7 +104,7 @@ function updateTimer() {
     reset(true)
     currentPlayer = currentPlayer === 0 ? 1 : 0
     correctWords = 0
-    wordEl.textContent = 'next player...'
+    wordEl.textContent = currentPlayer === 0 ? 'Player 1' : 'Player 2'
   }
 }
 

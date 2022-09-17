@@ -29,7 +29,6 @@ let currentWord // what is the current word
 let roundWinner // who won the round
 let winner // who won the game
 
-renderNewWord()
 // ===== RANDOM WORD API =====
 function getRandomWord() {
   return fetch(URL)
@@ -37,8 +36,38 @@ function getRandomWord() {
     .then(data => data[0].word)
 }
 
-async function renderNewWord() {
-  const word = await getRandomWord()
-  console.log(word)
-  return word
+// ===== UPDATE WORD =====
+async function updateWord() {
+  wordEl.textContent = null
+  word = await getRandomWord()
+}
+
+// ===== PROCESS TEXT =====
+function processText() {
+  console.log('process text')
+}
+
+// ===== START GAME =====
+function startGame() {
+  console.log('start game')
+}
+
+// ===== UPDATE TIMER =====
+function updateTimer() {
+  console.log('update timer')
+}
+
+// ===== FINISH GAME =====
+function finishGame() {
+  console.log('finish game')
+}
+
+// ===== UPDATE ROUND =====
+function updateRound() {
+  console.log('update round')
+}
+
+// ===== UPDATE STATS =====
+function updateStats() {
+  console.log('update stats')
 }

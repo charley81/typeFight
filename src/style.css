@@ -65,10 +65,16 @@ section {
 
 #info h3 {
   font-size: 2rem;
+  border-bottom: 4px var(--color-grey-dark) transparent;
+  transition: all 0.2s ease-in-out;
 }
 
 #info p {
   color: var(--color-grey-dark);
+}
+
+.stats {
+  margin: 1rem 0;
 }
 
 /* word & input */
@@ -122,5 +128,5 @@ section {
 }
 
 .current-player {
-  border-bottom: 4px solid var(--color-grey-light);
+  border-bottom: 4px solid var(--color-grey-dark);
 }

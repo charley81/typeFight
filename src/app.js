@@ -11,7 +11,7 @@ const countdownEl = document.querySelector('#session-info').querySelector('p')
 const timeRemaining = document.querySelector('#session-info').querySelector('p')
 
 // vars to keep track of things
-const URL = 'https://random-words-api.vercel.app/word' // random word
+const URL = 'https://random-words-api.herokuapp.com/w?n=1' // random word
 let round = 1 // keep track of each round
 let playerWordCount = [0, 0] // keep track of each players correctly typed words
 let roundsWon = [0, 0] // keep track of rounds won for each player
@@ -33,13 +33,19 @@ let winner // who won the game
 function getRandomWord() {
   return fetch(URL)
     .then(res => res.json())
-    .then(data => data[0].word)
+    .then(data => data[0])
 }
 
 // ===== UPDATE WORD =====
 async function updateWord() {
   wordEl.textContent = null
-  word = await getRandomWord()
+  currentWord = await getRandomWord()
+
+  currentWord.split('').forEach(char => {
+    const span = document.createElement('span')
+    span.innerText = char
+    wordEl.appendChild(span)
+  })
 }
 
 // ===== PROCESS TEXT =====
@@ -50,6 +56,7 @@ function processText() {
 // ===== START GAME =====
 function startGame() {
   console.log('start game')
+  updateWord()
 }
 
 // ===== UPDATE TIMER =====
@@ -71,3 +78,6 @@ function updateRound() {
 function updateStats() {
   console.log('update stats')
 }
+
+// ===== EVENT LISTERNERS =====
+inputEl.addEventListener('focus', startGame)

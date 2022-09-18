@@ -172,7 +172,11 @@ function swithPlayer() {
 
   // if it's player 2, then round is over. we need to check who won
   if (currentPlayer === 1) {
-    round++
+    if (round === 3) {
+      round = 1
+    } else {
+      round++
+    }
     // check who won the round
     roundWinner()
   }
@@ -200,7 +204,17 @@ function swithPlayer() {
 
 // ===== CHECK ROUND =====
 function roundWinner() {
-  winner = playerWordCount[0] > playerWordCount[1] ? 0 : 1
+  if (playerWordCount[0] === playerWordCount[1]) {
+    if (totalErrors[0] < totalErrors[1]) {
+      winner = 0
+    } else {
+      winner = 1
+    }
+  } else if (playerWordCount[0] > playerWordCount[1]) {
+    winner = 0
+  } else {
+    winner = 1
+  }
 
   alert(`Player ${winner + 1} won round: ${round - 1}`)
 
@@ -244,6 +258,9 @@ function finishGame() {
   document
     .querySelector(`.player-${winner}`)
     .querySelector('.games-won').textContent = `Games Won: ${gamesWon[winner]}`
+  alert(`Player ${winner + 1} won the game 🎉`)
+  round = 1
+  document.querySelector('.round').innerHTML = `<span>round</span> ${round}`
 }
 
 // ===== EVENT LISTERNERS =====

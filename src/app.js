@@ -140,6 +140,7 @@ function swithPlayer() {
   // reset players word count and total errors
   wordCount = 0
   errors = 0
+  totalErrors = 0
 
   // if it's player 2, then round is over. we need to check who won
   if (currentPlayer === 1) {
@@ -150,15 +151,12 @@ function swithPlayer() {
     }
     // check who won the round
     roundWinner()
+
+    alertStatus()
   }
 
   // change current player
   currentPlayer = currentPlayer === 0 ? 1 : 0
-
-  setTimeout(() => {
-    // notify the next player of what to do
-    alert(`Player ${currentPlayer + 1}, click in the input field to begin`)
-  }, 1000)
 
   // toggle css class to update UI to show current player
   player1El.querySelector('h3').classList.toggle('current-player')
@@ -221,7 +219,7 @@ function getWordCountStats() {
   // update players total errors number
   document
     .querySelector(`.player-${currentPlayer}`)
-    .querySelector('.total-errors').textContent = `Total Errors: ${errors}`
+    .querySelector('.total-errors').textContent = `Errors: ${errors}`
 }
 
 // ===== RESET VALUES =====
@@ -252,7 +250,7 @@ function resetValues() {
     .forEach(item => (item.textContent = 'Word Count: 0'))
   document
     .querySelectorAll('.total-errors')
-    .forEach(item => (item.textContent = 'Total Errors: 0'))
+    .forEach(item => (item.textContent = 'Errors: 0'))
 }
 
 // ===== FINISH GAME =====
@@ -264,6 +262,21 @@ function finishGame() {
 
   winner = roundsWon[0] === 2 ? 0 : 1
   gamesWon[winner]++
+
+  roundsWon = [0, 0]
+
+  document
+    .querySelectorAll('.rounds-won')
+    .forEach(item => (item.textContent = `Rounds Won: 0`))
+
+  document
+    .querySelectorAll('.word-count')
+    .forEach(item => (item.textContent = `Word Count: 0`))
+
+  document
+    .querySelectorAll('.total-errors')
+    .forEach(item => (item.textContent = `Errors: 0`))
+
   document
     .querySelector(`.player-${winner}`)
     .querySelector('.games-won').textContent = `Games Won: ${gamesWon[winner]}`
@@ -275,7 +288,7 @@ function finishGame() {
 // ===== ALERT STATUS =====
 function alertStatus() {
   setTimeout(() => {
-    alert(`Player ${currentPlayer + 1} click in the input field to begin`)
+    alert(`Round ${round}: Click in the input to begin`)
   }, 1000)
 }
 

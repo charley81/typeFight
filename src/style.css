@@ -76,6 +76,10 @@ section {
   margin: 1rem 0;
 }
 
+.stats p {
+  margin: 0.5rem 0;
+}
+
 /* word & input */
 
 .word {

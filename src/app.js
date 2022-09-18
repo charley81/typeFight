@@ -88,6 +88,9 @@ function processText() {
   // update accuracy
   let correctChars = charsTyped - (totalErrors + errors)
   let accuracyVal = (correctChars / charsTyped) * 100
+  if (accuracyVal < 0) {
+    accuracyVal = 0
+  }
   accuracyEl.textContent = `${Math.round(accuracyVal)}%`
 
   if (currentInput === currentWord) {

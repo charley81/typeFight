@@ -14,7 +14,7 @@ const accuracyEl = document.querySelector('.accuracy')
 const URL = 'https://random-words-api.herokuapp.com/w?n=1' // random word
 let round = 1 // keep track of each round
 let playerWordCount = [0, 0] // keep track of each players correctly typed words
-let playerTotalErrors = [0, 0] // keep track of each players correctly typed words
+let playerErrors = [0, 0] // keep track of each players correctly typed words
 let roundsWon = [0, 0] // keep track of rounds won for each player
 let gamesWon = [0, 0] // keep track of total games won for each player
 let wordCount = 0 // keep track of num of words typed correclty during the round
@@ -107,6 +107,123 @@ function startGame() {
   timer = setInterval(updateTimer, 1000)
 }
 
+// ===== UPDATE TIMER =====
+function updateTimer() {
+  if (timeLeft > 0) {
+    timeLeft--
+    timeElapsed++
+    countdownEl.textContent = `${timeLeft} seconds`
+  } else {
+    // get stats and update in UI
+    getWordCountStats()
+
+    // when the timer runs out switch player
+    swithPlayer()
+  }
+}
+
+// ===== SWITCH PLAYER =====
+function swithPlayer() {
+  // the round is over. disable the input. after one minute disable it and clear the value
+  inputEl.disabled = true
+  setTimeout(() => {
+    inputEl.disabled = false
+    inputEl.value = ''
+  }, 1000)
+
+  // clear timer
+  clearInterval(timer)
+
+  playerWordCount[currentPlayer] = wordCount
+  playerErrors[currentPlayer] = errors
+
+  // reset players word count and total errors
+  wordCount = 0
+  errors = 0
+
+  // if it's player 2, then round is over. we need to check who won
+  if (currentPlayer === 1) {
+    if (round === 3) {
+      round = 1
+    } else {
+      round++
+    }
+    // check who won the round
+    roundWinner()
+  }
+
+  // change current player
+  currentPlayer = currentPlayer === 0 ? 1 : 0
+
+  setTimeout(() => {
+    // notify the next player of what to do
+    alert(`Player ${currentPlayer + 1}, click in the input field to begin`)
+  }, 1000)
+
+  // toggle css class to update UI to show current player
+  player1El.querySelector('h3').classList.toggle('current-player')
+  player2El.querySelector('h3').classList.toggle('current-player')
+
+  // show next player in UI
+  wordEl.textContent = `${currentPlayer === 0 ? 'Player 1' : 'Player 2'}`
+  // update the round in the UI
+  roundEl.innerHTML = `<span>Round: </span> ${round}`
+
+  // reset time left and errors for next player
+  timeLeft = timeLimit
+
+  // reset accuracy for next player
+  accuracyEl.textContent = '100%'
+
+  // reset coutdown text
+  countdownEl.textContent = `${timeLimit} seconds`
+}
+
+// ===== CHECK ROUND =====
+function roundWinner() {
+  if (playerWordCount[0] === playerWordCount[1]) {
+    console.log(playerErrors[0], playerErrors[1])
+    if (playerErrors[0] < playerErrors[1]) {
+      winner = 0
+    } else {
+      winner = 1
+    }
+  } else if (playerWordCount[0] > playerWordCount[1]) {
+    winner = 0
+  } else {
+    winner = 1
+  }
+
+  alert(`Player ${winner + 1} won round: ${round - 1}`)
+
+  // update the players round won var
+  roundsWon[winner]++
+
+  // select the winner and increment their rounds won var
+  document
+    .querySelector(`.player-${winner}`)
+    .querySelector(
+      '.rounds-won'
+    ).textContent = `Rounds Won: ${roundsWon[winner]}`
+
+  if (roundsWon[0] === 2 || roundsWon[1] === 2) {
+    finishGame()
+  }
+}
+
+// ===== GET WORD COUNT STATS =====
+function getWordCountStats() {
+  // update word count in UI for player
+  document
+    .querySelector(`.player-${currentPlayer}`)
+    .querySelector('.word-count').textContent = `Word Count: ${wordCount}`
+
+  // update players total errors number
+  document
+    .querySelector(`.player-${currentPlayer}`)
+    .querySelector('.total-errors').textContent = `Total Errors: ${errors}`
+}
+
 // ===== RESET VALUES =====
 function resetValues() {
   timeLeft = timeLimit
@@ -138,114 +255,6 @@ function resetValues() {
     .forEach(item => (item.textContent = 'Total Errors: 0'))
 }
 
-// ===== UPDATE TIMER =====
-function updateTimer() {
-  if (timeLeft > 0) {
-    timeLeft--
-    timeElapsed++
-    countdownEl.textContent = `${timeLeft} seconds`
-  } else {
-    // get stats and update in UI
-    getWordCountStats()
-
-    // when the timer runs out switch player
-    swithPlayer()
-  }
-}
-
-// ===== SWITCH PLAYER =====
-function swithPlayer() {
-  // the round is over. disable the input. after one minute disable it and clear the value
-  inputEl.disabled = true
-  setTimeout(() => {
-    inputEl.disabled = false
-    inputEl.value = ''
-  }, 1000)
-
-  // clear timer
-  clearInterval(timer)
-
-  playerWordCount[currentPlayer] = wordCount
-
-  // reset players word count
-  wordCount = 0
-
-  // if it's player 2, then round is over. we need to check who won
-  if (currentPlayer === 1) {
-    if (round === 3) {
-      round = 1
-    } else {
-      round++
-    }
-    // check who won the round
-    roundWinner()
-  }
-
-  // change current player
-  currentPlayer = currentPlayer === 0 ? 1 : 0
-
-  // toggle css class to update UI to show current player
-  player1El.querySelector('h3').classList.toggle('current-player')
-  player2El.querySelector('h3').classList.toggle('current-player')
-
-  // show next player in UI
-  wordEl.textContent = `${currentPlayer === 0 ? 'Player 1' : 'Player 2'}`
-  // update the round in the UI
-  roundEl.innerHTML = `<span>Round: </span> ${round}`
-
-  timeLeft = timeLimit
-
-  // reset accuracy for next player
-  accuracyEl.textContent = '100%'
-
-  // reset coutdown text
-  countdownEl.textContent = `${timeLimit} seconds`
-}
-
-// ===== CHECK ROUND =====
-function roundWinner() {
-  if (playerWordCount[0] === playerWordCount[1]) {
-    if (totalErrors[0] < totalErrors[1]) {
-      winner = 0
-    } else {
-      winner = 1
-    }
-  } else if (playerWordCount[0] > playerWordCount[1]) {
-    winner = 0
-  } else {
-    winner = 1
-  }
-
-  alert(`Player ${winner + 1} won round: ${round - 1}`)
-
-  // update the players round won var
-  roundsWon[winner]++
-
-  // select the winner and increment their rounds won var
-  document
-    .querySelector(`.player-${winner}`)
-    .querySelector(
-      '.rounds-won'
-    ).textContent = `Rounds Won: ${roundsWon[winner]}`
-
-  if (roundsWon[0] === 2 || roundsWon[1] === 2) {
-    finishGame()
-  }
-}
-
-// ===== GET STATS =====
-function getWordCountStats() {
-  // update word count in UI for player
-  document
-    .querySelector(`.player-${currentPlayer}`)
-    .querySelector('.word-count').textContent = `Word Count: ${wordCount}`
-
-  // update players total errors number
-  document
-    .querySelector(`.player-${currentPlayer}`)
-    .querySelector('.total-errors').textContent = `Total Errors: ${totalErrors}`
-}
-
 // ===== FINISH GAME =====
 function finishGame() {
   console.log('finish game')
@@ -263,7 +272,15 @@ function finishGame() {
   document.querySelector('.round').innerHTML = `<span>round</span> ${round}`
 }
 
+// ===== ALERT STATUS =====
+function alertStatus() {
+  setTimeout(() => {
+    alert(`Player ${currentPlayer + 1} click in the input field to begin`)
+  }, 1000)
+}
+
 // ===== EVENT LISTERNERS =====
+window.addEventListener('DOMContentLoaded', alertStatus)
 inputEl.addEventListener('focus', startGame)
 inputEl.addEventListener('input', processText)
 resetBtn.addEventListener('click', resetValues)

@@ -42,10 +42,11 @@ function getRandomWord() {
 
 // ===== UPDATE WORD =====
 async function updateWord() {
+  // clear word text
   wordEl.textContent = null
   currentWord = await getRandomWord()
 
-  // update word in UI
+  // loop over the given word. create a span for each letter. append to word h1
   currentWord.split('').forEach(char => {
     const span = document.createElement('span')
     span.innerText = char
@@ -88,11 +89,13 @@ function processText() {
   // update accuracy
   let correctChars = charsTyped - (totalErrors + errors)
   let accuracyVal = (correctChars / charsTyped) * 100
+  // don't let accuracy go below 0
   if (accuracyVal < 0) {
     accuracyVal = 0
   }
   accuracyEl.textContent = `${Math.round(accuracyVal)}%`
 
+  // if user typed the word correctly
   if (currentInput === currentWord) {
     updateWord()
     totalErrors += errors
@@ -116,7 +119,9 @@ function updateTimer() {
     timeLeft--
     timeElapsed++
     countdownEl.textContent = `${timeLeft} seconds`
-  } else {
+  }
+  // times up
+  else {
     // get stats and update in UI
     getWordCountStats()
 
@@ -137,10 +142,11 @@ function swithPlayer() {
   // clear timer
   clearInterval(timer)
 
+  // update current players word count and errors var
   playerWordCount[currentPlayer] = wordCount
   playerErrors[currentPlayer] = errors
 
-  // reset players word count and total errors
+  // reset players word count, errors and total errors
   wordCount = 0
   errors = 0
   totalErrors = 0
@@ -154,7 +160,7 @@ function swithPlayer() {
     }
     // check who won the round
     roundWinner()
-
+    // show next round alert
     alertStatus()
   }
 
@@ -182,6 +188,7 @@ function swithPlayer() {
 
 // ===== CHECK ROUND =====
 function roundWinner() {
+  // check to see who won the round
   if (playerWordCount[0] === playerWordCount[1]) {
     console.log(playerErrors[0], playerErrors[1])
     if (playerErrors[0] < playerErrors[1]) {
@@ -227,6 +234,7 @@ function getWordCountStats() {
 
 // ===== RESET VALUES =====
 function resetValues() {
+  // when clicking the reset button reset all
   timeLeft = timeLimit
   timeElapsed = 0
   errors = 0
@@ -258,16 +266,19 @@ function resetValues() {
 
 // ===== FINISH GAME =====
 function finishGame() {
-  console.log('finish game')
   clearInterval(timer)
   inputEl.disabled = true
   wordEl.textContent = 'loading'
 
+  // check who won
   winner = roundsWon[0] === 2 ? 0 : 1
+  // increment the winners games won var
   gamesWon[winner]++
 
+  // reset rounds won back to 0
   roundsWon = [0, 0]
 
+  // update DOM once round game is over
   document
     .querySelectorAll('.rounds-won')
     .forEach(item => (item.textContent = `Rounds Won: 0`))
@@ -290,13 +301,18 @@ function finishGame() {
 
 // ===== ALERT STATUS =====
 function alertStatus() {
+  // alerts for the next round
   setTimeout(() => {
     alert(`Round ${round}: Click in the input to begin`)
   }, 1000)
 }
 
 // ===== EVENT LISTERNERS =====
+// when window loads
 window.addEventListener('DOMContentLoaded', alertStatus)
+// when user focuses on input
 inputEl.addEventListener('focus', startGame)
+// when input changes
 inputEl.addEventListener('input', processText)
+// when reset btn is clicked
 resetBtn.addEventListener('click', resetValues)

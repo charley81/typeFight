@@ -100,7 +100,6 @@ function processText() {
 
 // ===== START GAME =====
 function startGame() {
-  resetValues()
   updateWord()
 
   // clear and start a new timer
@@ -116,11 +115,27 @@ function resetValues() {
   totalErrors = 0
   accuracy = 0
   charsTyped = 0
+  gamesWon = [0, 0]
+  roundsWon = [0, 0]
+  wordCount = 0
+  totalErrors = 0
   inputEl.disabled = false
   inputEl.value = ''
   wordEl.textContent = 'loading...'
   accuracyEl.textContent = '100%'
   countdownEl.textContent = `${timeLimit} seconds`
+  document
+    .querySelectorAll('.games-won')
+    .forEach(item => (item.textContent = 'Games Won: 0'))
+  document
+    .querySelectorAll('.rounds-won')
+    .forEach(item => (item.textContent = 'Rounds Won: 0'))
+  document
+    .querySelectorAll('.word-count')
+    .forEach(item => (item.textContent = 'Word Count: 0'))
+  document
+    .querySelectorAll('.total-errors')
+    .forEach(item => (item.textContent = 'Total Errors: 0'))
 }
 
 // ===== UPDATE TIMER =====
@@ -157,6 +172,8 @@ function swithPlayer() {
 
   // if it's player 2, then round is over. we need to check who won
   if (currentPlayer === 1) {
+    round++
+    // check who won the round
     roundWinner()
   }
 
@@ -183,13 +200,19 @@ function swithPlayer() {
 
 // ===== CHECK ROUND =====
 function roundWinner() {
-  console.log(playerWordCount)
   winner = playerWordCount[0] > playerWordCount[1] ? 0 : 1
 
-  setTimeout(() => {
-    alert(`Player ${winner + 1} won round: ${round}`)
-    round++
-  }, 1000)
+  alert(`Player ${winner + 1} won round: ${round - 1}`)
+
+  // update the players round won var
+  roundsWon[winner]++
+
+  // select the winner and increment their rounds won var
+  document
+    .querySelector(`.player-${winner}`)
+    .querySelector(
+      '.rounds-won'
+    ).textContent = `Rounds Won: ${roundsWon[winner]}`
 }
 
 // ===== GET STATS =====

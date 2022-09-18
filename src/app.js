@@ -26,7 +26,6 @@ let timer // var for timer
 let timeLeft = timeLimit // time left starts with the timelimite and then deincrements
 let currentInput // current letter typing
 let currentWord // what is the current word
-let roundWinner // who won the round
 let gameWinner // who won the game
 let charsTyped = 0 // keeping track of number of chars typed
 let timeElapsed // how much time has elapsed
@@ -132,7 +131,7 @@ function updateTimer() {
     countdownEl.textContent = `${timeLeft} seconds`
   } else {
     // get stats and update in UI
-    getStats()
+    getWordCountStats()
 
     // when the timer runs out switch player
     swithPlayer()
@@ -151,8 +150,15 @@ function swithPlayer() {
   // clear timer
   clearInterval(timer)
 
+  playerWordCount[currentPlayer] = wordCount
+
   // reset players word count
   wordCount = 0
+
+  // if it's player 2, then round is over. we need to check who won
+  if (currentPlayer === 1) {
+    roundWinner()
+  }
 
   // change current player
   currentPlayer = currentPlayer === 0 ? 1 : 0
@@ -175,55 +181,29 @@ function swithPlayer() {
   countdownEl.textContent = `${timeLimit} seconds`
 }
 
-//
-function getStats() {
+// ===== CHECK ROUND =====
+function roundWinner() {
+  console.log(playerWordCount)
+  winner = playerWordCount[0] > playerWordCount[1] ? 0 : 1
+
+  setTimeout(() => {
+    alert(`Player ${winner + 1} won round: ${round}`)
+    round++
+  }, 1000)
+}
+
+// ===== GET STATS =====
+function getWordCountStats() {
   // update word count in UI for player
   document
     .querySelector(`.player-${currentPlayer}`)
     .querySelector('.word-count').textContent = `Word Count: ${wordCount}`
 
-  // upd
+  // update players total errors number
   document
     .querySelector(`.player-${currentPlayer}`)
     .querySelector('.total-errors').textContent = `Total Errors: ${totalErrors}`
 }
-
-// ===== FINISH ROUND =====
-// function finishRound() {
-//   //update player stats
-//   updateStats()
-
-//   //reset word count to 0 for next player
-//   wordCount = 0
-
-//   // increment round if less than three and update the UI
-//   if (round < 3) {
-//     round++
-//     document.querySelector('.round').innerHTML = `<span>round</span> ${round}`
-//   }
-// }
-
-// ===== UPDATE STATS =====
-// function updateStats() {
-//   console.log('update stats')
-//   // update the current players word count var
-//   playerWordCount[currentPlayer] = wordCount
-
-//   // update word count in UI
-//   document
-//     .querySelector(`.player-${currentPlayer}`)
-//     .querySelector(
-//       '.word-count'
-//     ).textContent = `Word Count: ${playerWordCount[currentPlayer]}`
-
-//   // update player total errors and update in UI
-//   playerTotalErrors[currentPlayer] = totalErrors
-//   document
-//     .querySelector(`.player-${currentPlayer}`)
-//     .querySelector(
-//       '.total-errors'
-//     ).textContent = `Total Errors: ${playerTotalErrors[currentPlayer]}`
-// }
 
 // ===== FINISH GAME =====
 function finishGame() {

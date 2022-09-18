@@ -54,18 +54,17 @@ section {
 
 #info h1 {
   color: var(--color-primary);
-  font-size: 8rem;
+  font-size: 4rem;
 }
 
 #info h1 span {
   color: var(--color-dark);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
 }
 
 #info h3 {
   font-size: 2rem;
-  border-bottom: 4px var(--color-grey-dark) transparent;
   transition: all 0.2s ease-in-out;
 }
 
@@ -99,6 +98,10 @@ section {
 #session-info {
   margin: 1rem auto;
   text-align: center;
+}
+
+#session-info h1 {
+  color: var(--color-grey-dark);
 }
 
 /* restart section */

@@ -213,6 +213,10 @@ function roundWinner() {
     .querySelector(
       '.rounds-won'
     ).textContent = `Rounds Won: ${roundsWon[winner]}`
+
+  if (roundsWon[0] === 2 || roundsWon[1] === 2) {
+    finishGame()
+  }
 }
 
 // ===== GET STATS =====
@@ -233,7 +237,13 @@ function finishGame() {
   console.log('finish game')
   clearInterval(timer)
   inputEl.disabled = true
-  wordEl.textContent = 'click restart for a new game'
+  wordEl.textContent = 'loading'
+
+  winner = roundsWon[0] === 2 ? 0 : 1
+  gamesWon[winner]++
+  document
+    .querySelector(`.player-${winner}`)
+    .querySelector('.games-won').textContent = `Games Won: ${gamesWon[winner]}`
 }
 
 // ===== EVENT LISTERNERS =====
